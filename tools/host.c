@@ -27,7 +27,7 @@ void sabi_host_debug(const char *file, int line, const char *fmt, ...)
 
 void sabi_host_panic()
 {
-	while(1);
+	exit(1);
 }
 
 uint64_t sabi_host_map(uint64_t address)

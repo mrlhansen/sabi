@@ -8,7 +8,7 @@ The host OS must provide a set of basic functions needed for SABI to work. These
 
 Besides from the host functions, the code assumes the existence of `stdint.h` and a minimally working implementation of `string.h` containing the following C99 compliant functions.
 
-```C
+```
 memcpy()
 memset()
 strcpy()

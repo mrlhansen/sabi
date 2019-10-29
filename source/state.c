@@ -2,7 +2,6 @@
 #include <sabi/state.h>
 #include <sabi/host.h>
 #include <sabi/api.h>
-#include <string.h>
 
 state_t *sabi_new_state()
 {
