@@ -739,8 +739,7 @@ void sabi_def_return(state_t *state)
 
 void sabi_def_scope(state_t *state)
 {
-	sabi_object_t object;
-	sabi_node_t *scope;
+	sabi_node_t *scope, *node;
 	sabi_name_t name;
 	pkg_t pkg;
 
@@ -748,12 +747,16 @@ void sabi_def_scope(state_t *state)
 	sabi_pkg_length(state, &pkg);
 	sabi_name_string(state, &name);
 
-	// Construct object
-	object.type = SABI_OBJECT_SCOPE;
+	// Find scope
+	node = sabi_ns_find(state->scope, &name);
+	if(node == 0)
+	{
+		sabi_fatal("namespace lookup failed: %s", name.value);
+	}
 
-	// Append to namespace
+	// Change scope
 	scope = state->scope;
-	sabi_ns_add_scope(state, &name, &object);
+	state->scope = node;
 	sabi_parse_termlist(state, pkg.end);
 	state->scope = scope;
 }

@@ -138,7 +138,7 @@ sabi_node_t *sabi_pci_next_node(sabi_node_t *node)
 		type = node->object.type;
 		search = 0;
 
-		if((type == SABI_OBJECT_DEVICE) || (type == SABI_OBJECT_SCOPE))
+		if(type == SABI_OBJECT_DEVICE)
 		{
 			if(sabi_check_pnp_id(node, hid))
 			{

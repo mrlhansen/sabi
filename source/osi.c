@@ -39,10 +39,10 @@ void sabi_osi_parse(state_t *state)
 	}
 
 	sabi_clean_data(&data);
-	sabi_clean_data(state->retv);
+	sabi_clean_data(retv);
 
 	retv->integer.type = SABI_DATA_INTEGER;
-	retv->integer.type = value;
+	retv->integer.value = value;
 }
 
 void sabi_osi_method(sabi_node_t *node)

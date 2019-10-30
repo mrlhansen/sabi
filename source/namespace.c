@@ -13,6 +13,13 @@ static sabi_node_t *new_node(const char *name)
 	return node;
 }
 
+static void append_node(sabi_node_t *parent, sabi_node_t *node)
+{
+	node->parent = parent;
+	node->next = parent->child;
+	parent->child = node;
+}
+
 sabi_node_t *sabi_ns_root()
 {
 	return root;
@@ -226,34 +233,49 @@ sabi_node_t *sabi_ns_add_object(state_t *state, sabi_name_t *name, sabi_object_t
 void sabi_ns_init()
 {
 	sabi_node_t *node;
+	sabi_object_t object;
 
 	if(root)
 	{
 		return;
 	}
-	else
-	{
-		root = new_node("ROOT");
-	}
+
+	root = new_node("ROOT");
+	object.device.type = SABI_OBJECT_DEVICE;
+	object.device.adr = 0;
+
+	// Add _SB scope
+	node = new_node("_SB_");
+	node->object = object;
+	append_node(root, node);
+
+	// Add _TZ scope
+	node = new_node("_TZ_");
+	node->object = object;
+	append_node(root, node);
+
+	// Add _PR scope
+	node = new_node("_PR_");
+	node->object = object;
+	append_node(root, node);
+
+	// Add _GPE scope
+	node = new_node("_GPE");
+	node->object = object;
+	append_node(root, node);
 
 	// Add _OS object
 	node = new_node("_OS_");
 	sabi_osi_string(node);
-	node->parent = root;
-	node->next = root->child;
-	root->child = node;
+	append_node(root, node);
 
 	// Add _REV object
 	node = new_node("_REV");
 	sabi_osi_revision(node);
-	node->parent = root;
-	node->next = root->child;
-	root->child = node;
+	append_node(root, node);
 
 	// Add _OSI object
 	node = new_node("_OSI");
 	sabi_osi_method(node);
-	node->parent = root;
-	node->next = root->child;
-	root->child = node;
+	append_node(root, node);
 }

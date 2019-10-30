@@ -20,7 +20,7 @@ static void sabi_call_init()
 		sta = 0x0F;
 		child = 0;
 
-		if((type == SABI_OBJECT_DEVICE) || (type == SABI_OBJECT_SCOPE))
+		if(type & SABI_OBJECT_SCOPE)
 		{
 			inode = sabi_ns_exists(node, "_INI");
 			if(inode)
