@@ -191,7 +191,6 @@ void sabi_def_create_field(state_t *state, int bits, int length)
 	sabi_name_t name;
 	uint64_t index;
 
-
 	// Parse arguments
 	sabi_parse_operand(state, &operand);
 	index = sabi_integer(state);
@@ -847,6 +846,7 @@ void sabi_def_thermal_zone(state_t *state)
 void sabi_def_tointeger(state_t *state, uint64_t *value)
 {
 	sabi_data_t data;
+	int count;
 
 	// Parse argument (target is handled by caller)
 	sabi_data_object(state, &data);
@@ -855,6 +855,22 @@ void sabi_def_tointeger(state_t *state, uint64_t *value)
 	if(data.type == SABI_DATA_INTEGER)
 	{
 		*value = data.integer.value;
+	}
+	else if(data.type == SABI_DATA_BUFFER)
+	{
+		count = data.buffer.size;
+		*value = 0;
+
+		if(count > 8)
+		{
+			count = 8;
+		}
+
+		while(count--)
+		{
+			*value <<= 8;
+			*value |= data.buffer.ptr[count];
+		}
 	}
 	else
 	{
