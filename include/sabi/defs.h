@@ -38,7 +38,10 @@ void sabi_def_sleep(state_t*);
 void sabi_def_stall(state_t*);
 void sabi_def_store(state_t*);
 void sabi_def_thermal_zone(state_t*);
+void sabi_def_tobuffer(state_t*, sabi_data_t*);
 void sabi_def_tointeger(state_t*, uint64_t*);
+void sabi_def_tostring(state_t*, sabi_data_t*);
+void sabi_def_tobasestring(state_t*, sabi_data_t*, int);
 void sabi_def_wait(state_t*, uint64_t*);
 void sabi_def_while(state_t*);
 

@@ -4,6 +4,7 @@
 #include <sabi/fields.h>
 #include <sabi/state.h>
 #include <sabi/host.h>
+#include <sabi/conv.h>
 #include <sabi/api.h>
 #include <string.h>
 
@@ -47,23 +48,6 @@ static void convert_path(sabi_name_t *name, const char *path)
 
 	*prefix = '\0';
 	*value = '\0';
-}
-
-static uint8_t char_to_hex(uint8_t c)
-{
-	if(c >= '0' && c <= '9')
-	{
-		return (c - '0');
-	}
-	else if(c >= 'A' && c <= 'F')
-	{
-		return (c - 'A' + 10);
-	}
-	else if(c >= 'a' && c <= 'f')
-	{
-		return (c - 'a' + 10);
-	}
-	return 0;
 }
 
 sabi_node_t *sabi_resolve_child(sabi_node_t *parent, const char *name)
@@ -284,10 +268,10 @@ uint32_t sabi_eisaid(const char *id)
 	value = (id[0] - 0x40);
 	value = (value << 5) | (id[1] - 0x40);
 	value = (value << 5) | (id[2] - 0x40);
-	value = (value << 4) | char_to_hex(id[3]);
-	value = (value << 4) | char_to_hex(id[4]);
-	value = (value << 4) | char_to_hex(id[5]);
-	value = (value << 4) | char_to_hex(id[6]);
+	value = (value << 4) | sabi_atoi(id[3], 16);
+	value = (value << 4) | sabi_atoi(id[4], 16);
+	value = (value << 4) | sabi_atoi(id[5], 16);
+	value = (value << 4) | sabi_atoi(id[6], 16);
 
 	bp = (uint8_t*)&value;
 	swap = bp[0];

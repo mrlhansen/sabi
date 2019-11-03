@@ -4,6 +4,7 @@
 #include <sabi/types.h>
 #include <sabi/defs.h>
 #include <sabi/host.h>
+#include <sabi/conv.h>
 #include <sabi/api.h>
 #include <sabi/ec.h>
 #include <string.h>
@@ -843,38 +844,112 @@ void sabi_def_thermal_zone(state_t *state)
 	state->scope = scope;
 }
 
+void sabi_def_tobuffer(state_t *state, sabi_data_t *dp)
+{
+	operand_t operand;
+	sabi_data_t data;
+	int target;
+
+	// Parse arguments
+	sabi_data_object(state, &data);
+	if(*state->aml)
+	{
+		sabi_parse_operand(state, &operand);
+		target = 1;
+	}
+	else
+	{
+		target = 0;
+		state->aml++;
+	}
+
+	// Convert
+	sabi_conv_tobuffer(dp, &data);
+
+	// Store result
+	if(target)
+	{
+		sabi_write_operand(&operand, dp);
+	}
+
+	// Clean
+	sabi_clean_data(&data);
+}
+
 void sabi_def_tointeger(state_t *state, uint64_t *value)
 {
-	sabi_data_t data;
-	int count;
+	sabi_data_t data, dp;
 
 	// Parse argument (target is handled by caller)
 	sabi_data_object(state, &data);
 
-	// Convert to integer
-	if(data.type == SABI_DATA_INTEGER)
-	{
-		*value = data.integer.value;
-	}
-	else if(data.type == SABI_DATA_BUFFER)
-	{
-		count = data.buffer.size;
-		*value = 0;
+	// Convert
+	sabi_conv_tointeger(&dp, &data);
+	*value = dp.integer.value;
 
-		if(count > 8)
-		{
-			count = 8;
-		}
+	// Clean
+	sabi_clean_data(&data);
+}
 
-		while(count--)
-		{
-			*value <<= 8;
-			*value |= data.buffer.ptr[count];
-		}
+void sabi_def_tostring(state_t *state, sabi_data_t *dp)
+{
+	operand_t operand;
+	sabi_data_t data;
+	int target, len;
+
+	// Parse arguments
+	sabi_data_object(state, &data);
+	len = sabi_integer(state);
+	if(*state->aml)
+	{
+		sabi_parse_operand(state, &operand);
+		target = 1;
 	}
 	else
 	{
-		sabi_fatal("Unimplemented type %x", data.type);
+		target = 0;
+		state->aml++;
+	}
+
+	// Convert
+	sabi_conv_tostring(dp, &data, len);
+
+	// Store result
+	if(target)
+	{
+		sabi_write_operand(&operand, dp);
+	}
+
+	// Clean
+	sabi_clean_data(&data);
+}
+
+void sabi_def_tobasestring(state_t *state, sabi_data_t *dp, int base)
+{
+	operand_t operand;
+	sabi_data_t data;
+	int target;
+
+	// Parse arguments
+	sabi_data_object(state, &data);
+	if(*state->aml)
+	{
+		sabi_parse_operand(state, &operand);
+		target = 1;
+	}
+	else
+	{
+		target = 0;
+		state->aml++;
+	}
+
+	// Convert
+	sabi_conv_tobasestring(dp, &data, base);
+
+	// Store result
+	if(target)
+	{
+		sabi_write_operand(&operand, dp);
 	}
 
 	// Clean

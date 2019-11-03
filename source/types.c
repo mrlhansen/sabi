@@ -374,6 +374,18 @@ void sabi_data_object(state_t *state, sabi_data_t *data)
 		case 0x0D:
 			sabi_string(state, data);
 			break;
+		case 0x96:
+			sabi_def_tobuffer(state, data);
+			break;
+		case 0x97:
+			sabi_def_tobasestring(state, data, 10);
+			break;
+		case 0x98:
+			sabi_def_tobasestring(state, data, 16);
+			break;
+		case 0x9C:
+			sabi_def_tostring(state, data);
+			break;
 		default:
 			found = 0;
 			state->aml--;
