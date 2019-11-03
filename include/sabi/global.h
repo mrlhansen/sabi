@@ -70,7 +70,7 @@ union sabi_data {
 	} integer;
 	struct {
 		uint16_t type;
-		char value[80];
+		char *value;
 	} string;
 	struct {
 		uint16_t type;

@@ -25,11 +25,12 @@ static void sabi_string(state_t *state, sabi_data_t *data)
 	int len;
 
 	str = (char*)state->aml;
-	len = strlen(str);
+	len = 1 + strlen(str);
 
 	data->string.type = SABI_DATA_STRING;
+	data->string.value = sabi_host_alloc(1, len);
 	strcpy(data->string.value, str);
-	state->aml += (len + 1);
+	state->aml += len;
 }
 
 static int test_name_string(state_t *state)

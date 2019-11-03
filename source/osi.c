@@ -1,4 +1,5 @@
 #include <sabi/types.h>
+#include <sabi/host.h>
 #include <sabi/osi.h>
 #include <sabi/api.h>
 #include <string.h>
@@ -57,9 +58,14 @@ void sabi_osi_method(sabi_node_t *node)
 void sabi_osi_string(sabi_node_t *node)
 {
 	static sabi_data_t data;
+	int len;
+
 	node->object.name.type = SABI_OBJECT_NAME;
 	node->object.name.data = &data;
+
+	len = 1 + strlen(os);
 	data.string.type = SABI_DATA_STRING;
+	data.string.value = sabi_host_alloc(1, len);
 	strcpy(data.string.value, os);
 }
 

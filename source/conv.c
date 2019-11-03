@@ -181,6 +181,7 @@ void sabi_conv_tostring(sabi_data_t *dptr, sabi_data_t *sptr, int maxlen)
 	}
 	else
 	{
+		ptr = 0;
 		len = 0;
 	}
 
@@ -190,7 +191,7 @@ void sabi_conv_tostring(sabi_data_t *dptr, sabi_data_t *sptr, int maxlen)
 	}
 
 	dptr->string.type = SABI_DATA_STRING;
-	// allocate len+1 bytes
+	dptr->string.value = sabi_host_alloc(1, len+1);
 	strncpy(dptr->string.value, ptr, len);
 	dptr->string.value[len] = '\0';
 }
@@ -211,10 +212,9 @@ void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
 
 		str = sabi_host_alloc(1, len);
 		dptr->string.type = SABI_DATA_STRING;
-		//dptr->string.value = str;
+		dptr->string.value = str;
 
 		sabi_itoa(str, sptr->integer.value, base);
-		strcpy(dptr->string.value, str); // temporary
 	}
 	else if(sptr->type == SABI_DATA_BUFFER)
 	{
@@ -222,8 +222,7 @@ void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
 
 		str = sabi_host_alloc(1, len);
 		dptr->string.type = SABI_DATA_STRING;
-		//dptr->string.value = str;
-		char *tmp = str; // temporary
+		dptr->string.value = str;
 
 		comma = 0;
 		len = sptr->buffer.size;
@@ -245,7 +244,5 @@ void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
 			str += sabi_itoa(str, *buf++, base);
 			comma = 1;
 		}
-
-		strcpy(dptr->string.value, tmp); // temporary
 	}
 }

@@ -202,7 +202,9 @@ void sabi_clean_data(sabi_data_t *sptr)
 {
 	sabi_data_t *data;
 	int type, count;
+	void *ptr;
 
+	ptr = 0;
 	type = sptr->type;
 	sptr->type = SABI_DATA_NULL;
 
@@ -214,11 +216,20 @@ void sabi_clean_data(sabi_data_t *sptr)
 		{
 			sabi_clean_data(data+i);
 		}
-		sabi_host_free(data);
+		ptr = data;
 	}
 	else if(type == SABI_DATA_BUFFER)
 	{
-		sabi_host_free(sptr->buffer.ptr);
+		ptr = sptr->buffer.ptr;
+	}
+	else if(type == SABI_DATA_STRING)
+	{
+		ptr = sptr->string.value;
+	}
+
+	if(ptr)
+	{
+		sabi_host_free(ptr);
 	}
 }
 
@@ -251,6 +262,12 @@ void sabi_clone_data(sabi_data_t *dptr, sabi_data_t *sptr)
 		count = sptr->buffer.size;
 		dptr->buffer.ptr = sabi_host_alloc(1, count);
 		memcpy(dptr->buffer.ptr, sptr->buffer.ptr, count);
+	}
+	else if(type == SABI_DATA_STRING)
+	{
+		count = 1 + strlen(sptr->string.value);
+		dptr->string.value = sabi_host_alloc(1, count);
+		strcpy(dptr->string.value, sptr->string.value);
 	}
 	else if(type == SABI_DATA_BUFFER_FIELD)
 	{
