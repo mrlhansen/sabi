@@ -864,7 +864,7 @@ void sabi_def_tobuffer(state_t *state, sabi_data_t *dp)
 	}
 
 	// Convert
-	sabi_conv_tobuffer(dp, &data);
+	sabi_conv_tobuffer(dp, &data, 0);
 
 	// Store result
 	if(target)
@@ -884,7 +884,7 @@ void sabi_def_tointeger(state_t *state, uint64_t *value)
 	sabi_data_object(state, &data);
 
 	// Convert
-	sabi_conv_tointeger(&dp, &data);
+	sabi_conv_tointeger(&dp, &data, 0);
 	*value = dp.integer.value;
 
 	// Clean
@@ -944,7 +944,7 @@ void sabi_def_tobasestring(state_t *state, sabi_data_t *dp, int base)
 	}
 
 	// Convert
-	sabi_conv_tobasestring(dp, &data, base);
+	sabi_conv_tobasestring(dp, &data, base, 0);
 
 	// Store result
 	if(target)

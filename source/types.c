@@ -3,6 +3,7 @@
 #include <sabi/parser.h>
 #include <sabi/types.h>
 #include <sabi/host.h>
+#include <sabi/conv.h>
 #include <sabi/defs.h>
 #include <sabi/api.h>
 #include <string.h>
@@ -232,21 +233,16 @@ uint64_t sabi_integer(state_t *state)
 
 	if(sabi_parse_method(state))
 	{
-		return state->retv->integer.value; // Type check
+		value = sabi_conv_tointeger(0, &data, 1);
+		return value;
 	}
 
 	found = sabi_parse_operand(state, &operand);
 	if(found)
 	{
 		sabi_read_operand(&operand, &data);
-		if(data.type == SABI_DATA_INTEGER)
-		{
-			return data.integer.value;
-		}
-		else
-		{
-			sabi_debug("wrong data type %x, expected integer", data.type);
-		}
+		value = sabi_conv_tointeger(0, &data, 1);
+		return value;
 	}
 
 	sabi_fatal("integer not found, opcode %x", prefix);

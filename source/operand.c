@@ -4,6 +4,7 @@
 #include <sabi/fields.h>
 #include <sabi/types.h>
 #include <sabi/host.h>
+#include <sabi/conv.h>
 #include <sabi/api.h>
 #include <string.h>
 
@@ -312,11 +313,9 @@ void sabi_write_operand(operand_t *op, sabi_data_t *dp)
 {
 	sabi_object_t *object;
 	sabi_data_t *data;
-	void *sptr, *dptr;
 	int otype, stype;
 	operand_t otmp;
 	uint64_t value;
-	int s0, s1;
 
 	if(op->flags & OPERAND_DEBUG)
 	{
@@ -329,8 +328,6 @@ void sabi_write_operand(operand_t *op, sabi_data_t *dp)
 		op = &otmp;
 	}
 
-	sptr = 0;
-	dptr = 0;
 	stype = dp->type;
 
 	if(op->flags & OPERAND_DATA)
@@ -400,56 +397,20 @@ void sabi_write_operand(operand_t *op, sabi_data_t *dp)
 	}
 	else if(otype == SABI_DATA_INTEGER)
 	{
-		if(stype == SABI_DATA_INTEGER)
-		{
-			data->integer.value = dp->integer.value;
-		}
-		else
-		{
-			sabi_debug("not integer data, type %x", stype);
-		}
+		data->integer.value = sabi_conv_tointeger(0, dp, 1);
 	}
 	else if(otype == SABI_DATA_BUFFER_FIELD)
 	{
-		if(stype == SABI_DATA_INTEGER)
-		{
-			value = dp->integer.value;
-			sabi_access_buffer_field(data, &value, 1);
-		}
-		else
-		{
-			sabi_debug("not integer data, type %x", stype);
-		}
+		value = sabi_conv_tointeger(0, dp, 1);
+		sabi_access_buffer_field(data, &value, 1);
 	}
 	else if(otype == SABI_DATA_BUFFER)
 	{
-		dptr = data->buffer.ptr;
-		s0 = data->buffer.size;
-
-		if(stype == SABI_DATA_BUFFER)
-		{
-			sptr = dp->buffer.ptr;
-			s1 = dp->buffer.size;
-		}
-		else if(stype == SABI_DATA_STRING)
-		{
-			sptr = dp->string.value;
-			s1 = strlen(sptr);
-		}
-		else
-		{
-			sabi_debug("unhandled conversion to buffer from type %x", stype);
-		}
-
-		if(sptr)
-		{
-			memset(dptr, 0, s0);
-			if(s1 < s0)
-			{
-				s0 = s1;
-			}
-			memcpy(dptr, sptr, s0);
-		}
+		sabi_conv_tobuffer(data, dp, 1);
+	}
+	else if(otype == SABI_DATA_STRING)
+	{
+		sabi_conv_tobasestring(data, dp, 16, 1);
 	}
 	else if(otype == SABI_DATA_PACKAGE)
 	{

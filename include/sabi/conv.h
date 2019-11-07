@@ -6,9 +6,9 @@
 int sabi_atoi(uint8_t, int);
 int sabi_itoa(char*, uint64_t, int);
 
-void sabi_conv_tobuffer(sabi_data_t*, sabi_data_t*);
-void sabi_conv_tointeger(sabi_data_t*, sabi_data_t*);
+void sabi_conv_tobuffer(sabi_data_t*, sabi_data_t*, int);
+uint64_t sabi_conv_tointeger(sabi_data_t*, sabi_data_t*, int);
 void sabi_conv_tostring(sabi_data_t*, sabi_data_t*, int);
-void sabi_conv_tobasestring(sabi_data_t*, sabi_data_t*, int);
+void sabi_conv_tobasestring(sabi_data_t*, sabi_data_t*, int, int);
 
 #endif

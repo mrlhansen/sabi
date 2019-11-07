@@ -58,10 +58,10 @@ int sabi_itoa(char *dest, uint64_t value, int base)
 	return len;
 }
 
-void sabi_conv_tobuffer(sabi_data_t *dptr, sabi_data_t *sptr)
+void sabi_conv_tobuffer(sabi_data_t *dptr, sabi_data_t *sptr, int exists)
 {
+	int size, len;
 	void *ptr;
-	int len;
 
 	if(sptr->type == SABI_DATA_BUFFER)
 	{
@@ -87,24 +87,48 @@ void sabi_conv_tobuffer(sabi_data_t *dptr, sabi_data_t *sptr)
 		len = 0;
 	}
 
-	dptr->buffer.type = SABI_DATA_BUFFER;
-	dptr->buffer.size = len;
-	dptr->buffer.ptr = 0;
+	if(exists)
+	{
+		size = dptr->buffer.size;
+		memset(dptr->buffer.ptr, 0, size);
+		if(len > size)
+		{
+			len = size;
+		}
+	}
+	else
+	{
+		dptr->buffer.type = SABI_DATA_BUFFER;
+		dptr->buffer.size = len;
+		dptr->buffer.ptr = 0;
+		if(len)
+		{
+			dptr->buffer.ptr = sabi_host_alloc(1, len);
+		}
+	}
+
 	if(len)
 	{
-		dptr->buffer.ptr = sabi_host_alloc(1, len);
 		memcpy(dptr->buffer.ptr, ptr, len);
 	}
 }
 
-void sabi_conv_tointeger(sabi_data_t *dptr, sabi_data_t *sptr)
+uint64_t sabi_conv_tointeger(sabi_data_t *dptr, sabi_data_t *sptr, int implicit)
 {
 	int base, len, tmp;
 	uint64_t value;
 	char *str;
 
-	value = 0;
-	base = 10;
+	if(implicit)
+	{
+		value = 0;
+		base = 16;
+	}
+	else
+	{
+		value = 0;
+		base = 10;
+	}
 
 	if(sptr->type == SABI_DATA_INTEGER)
 	{
@@ -155,8 +179,13 @@ void sabi_conv_tointeger(sabi_data_t *dptr, sabi_data_t *sptr)
 		value = 0;
 	}
 
-	dptr->integer.type = SABI_DATA_INTEGER;
-	dptr->integer.value = value;
+	if(dptr)
+	{
+		dptr->integer.type = SABI_DATA_INTEGER;
+		dptr->integer.value = value;
+	}
+
+	return value;
 }
 
 void sabi_conv_tostring(sabi_data_t *dptr, sabi_data_t *sptr, int maxlen)
@@ -196,11 +225,21 @@ void sabi_conv_tostring(sabi_data_t *dptr, sabi_data_t *sptr, int maxlen)
 	dptr->string.value[len] = '\0';
 }
 
-void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
+void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base, int implicit)
 {
+	uint8_t *buf, sep;
 	int len, comma;
-	uint8_t *buf;
 	char *str;
+
+	if(implicit)
+	{
+		base = 16;
+		sep = ' ';
+	}
+	else
+	{
+		sep = ',';
+	}
 
 	if(sptr->type == SABI_DATA_STRING)
 	{
@@ -232,7 +271,7 @@ void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
 		{
 			if(comma)
 			{
-				*str++ = ',';
+				*str++ = sep;
 			}
 
 			if(base == 16)
@@ -244,5 +283,7 @@ void sabi_conv_tobasestring(sabi_data_t *dptr, sabi_data_t *sptr, int base)
 			str += sabi_itoa(str, *buf++, base);
 			comma = 1;
 		}
+
+		*str = '\0';
 	}
 }
