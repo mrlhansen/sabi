@@ -166,6 +166,9 @@ int sabi_parse_math(state_t *state, uint64_t *value)
 			x = sabi_integer(state);
 			z = ~x;
 			break;
+		case 0x008E:
+			sabi_def_objecttype(state, &z);
+			break;
 		case 0x5B28: // FromBCD
 			sabi_def_convertbcd(state, &z, 1);
 			break;

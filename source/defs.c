@@ -572,6 +572,87 @@ void sabi_def_notify(state_t *state)
 	sabi_integer(state);
 }
 
+void sabi_def_objecttype(state_t *state, uint64_t *value)
+{
+	sabi_data_t *data;
+	operand_t operand;
+	int type;
+
+	// Parse arguments
+	sabi_parse_operand(state, &operand);
+	data = operand.refof;
+
+	// Handle references
+	if(data->type == SABI_DATA_REFERENCE)
+	{
+		data = data->reference.refof;
+	}
+
+	// Find object type
+	switch(data->type)
+	{
+		case SABI_DATA_NULL:
+			type = 0;
+			break;
+		case SABI_DATA_INTEGER:
+			type = 1;
+			break;
+		case SABI_DATA_STRING:
+			type = 2;
+			break;
+		case SABI_DATA_BUFFER:
+			type = 3;
+			break;
+		case SABI_DATA_PACKAGE:
+			type = 4;
+			break;
+		case SABI_OBJECT_FIELD:
+		case SABI_OBJECT_INDEX_FIELD:
+		case SABI_OBJECT_BANK_FIELD:
+			type = 5;
+			break;
+		case SABI_OBJECT_DEVICE:
+			type = 6;
+			break;
+		case SABI_OBJECT_EVENT:
+			type = 7;
+			break;
+		case SABI_OBJECT_METHOD:
+			type = 8;
+			break;
+		case SABI_OBJECT_MUTEX:
+			type = 9;
+			break;
+		case SABI_OBJECT_OP_REGION:
+			type = 10;
+			break;
+		case SABI_OBJECT_POWER_RES:
+			type = 11;
+			break;
+		case SABI_OBJECT_PROCESSOR:
+			type = 12;
+			break;
+		case SABI_OBJECT_THERMAL_ZONE:
+			type = 13;
+			break;
+		case SABI_DATA_BUFFER_FIELD:
+			type = 14;
+			break;
+		default:
+			type = -1;
+			break;
+	}
+
+	// Unhandled type
+	if(type < 0)
+	{
+		sabi_fatal("unhandled object type");
+	}
+
+	// Return value
+	*value = type;
+}
+
 void sabi_def_op_region(state_t *state)
 {
 	uint64_t offset, length;

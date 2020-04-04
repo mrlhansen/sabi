@@ -24,6 +24,7 @@ void sabi_def_method(state_t*);
 void sabi_def_mutex(state_t*);
 void sabi_def_name(state_t*);
 void sabi_def_notify(state_t*);
+void sabi_def_objecttype(state_t*, uint64_t*);
 void sabi_def_op_region(state_t*);
 void sabi_def_package(state_t*, sabi_data_t*, int);
 void sabi_def_power_res(state_t*);
