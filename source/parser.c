@@ -166,9 +166,6 @@ int sabi_parse_math(state_t *state, uint64_t *value)
 			x = sabi_integer(state);
 			z = ~x;
 			break;
-		case 0x008E:
-			sabi_def_objecttype(state, &z);
-			break;
 		case 0x5B28: // FromBCD
 			sabi_def_convertbcd(state, &z, 1);
 			break;
@@ -239,6 +236,9 @@ int sabi_parse_math(state_t *state, uint64_t *value)
 			break;
 		case 0x5B25: // DefWait
 			sabi_def_wait(state, &z);
+			break;
+		case 0x008E: // ObjectType
+			sabi_def_objecttype(state, &z);
 			break;
 		case 0x0090: // Logical AND
 			x = sabi_integer(state);
@@ -413,7 +413,7 @@ void sabi_parse_next(state_t *state)
 		case 0x00A5: // DefBreak
 			state->intr = INTR_BREAK;
 			break;
-		case 0x0088:
+		case 0x0088: // DefIndex
 			sabi_def_index(state, &operand);
 			break;
 		default:
