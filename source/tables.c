@@ -1,3 +1,4 @@
+#include <sabi/api.h>
 #include <sabi/namespace.h>
 #include <sabi/tables.h>
 #include <sabi/parser.h>
