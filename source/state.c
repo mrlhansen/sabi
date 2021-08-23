@@ -3,7 +3,7 @@
 #include <sabi/host.h>
 #include <sabi/api.h>
 
-state_t *sabi_new_state()
+state_t *sabi_new_state(void)
 {
 	sabi_data_t *data;
 	state_t *state;

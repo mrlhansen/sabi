@@ -25,7 +25,7 @@ void sabi_host_debug(const char *file, int line, const char *fmt, ...)
 	printf("%s:%d: %s\n", file, line, obuf);
 }
 
-void sabi_host_panic()
+void sabi_host_panic(void)
 {
 	exit(1);
 }

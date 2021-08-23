@@ -16,7 +16,7 @@ void *sabi_host_alloc(int, int);
 void sabi_host_free(void*);
 
 void sabi_host_debug(const char*, int, const char*, ...);
-void sabi_host_panic() __attribute__((noreturn));
+void sabi_host_panic(void) __attribute__((noreturn));
 
 uint64_t sabi_host_map(uint64_t);
 void sabi_host_sleep(uint64_t);

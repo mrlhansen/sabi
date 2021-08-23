@@ -80,6 +80,6 @@ typedef struct {
 	gas_t sleep_status_reg;
 } __attribute__((packed)) fadt_t;
 
-fadt_t *sabi_fadt_table();
+fadt_t *sabi_fadt_table(void);
 
 #endif

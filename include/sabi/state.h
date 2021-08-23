@@ -23,7 +23,7 @@ typedef struct {
 	int count;
 } state_t;
 
-state_t *sabi_new_state();
+state_t *sabi_new_state(void);
 void sabi_free_state(state_t*);
 
 #endif

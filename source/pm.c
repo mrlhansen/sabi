@@ -21,7 +21,7 @@ int sabi_pm_sleep(int state)
 	return -1;
 }
 
-void sabi_pm_soft_off()
+void sabi_pm_soft_off(void)
 {
 	sabi_node_t *root, *node;
 	sabi_data_t data;

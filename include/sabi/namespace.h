@@ -13,8 +13,8 @@ sabi_node_t *sabi_ns_find(sabi_node_t*, sabi_name_t*);
 void sabi_ns_add_scope(state_t*, sabi_name_t*, sabi_object_t*);
 sabi_node_t *sabi_ns_add_object(state_t*, sabi_name_t*, sabi_object_t*);
 
-sabi_node_t *sabi_ns_root();
+sabi_node_t *sabi_ns_root(void);
 void sabi_ns_unlink(sabi_node_t*);
-void sabi_ns_init();
+void sabi_ns_init(void);
 
 #endif

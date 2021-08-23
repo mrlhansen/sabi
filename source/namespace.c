@@ -20,7 +20,7 @@ static void append_node(sabi_node_t *parent, sabi_node_t *node)
 	parent->child = node;
 }
 
-sabi_node_t *sabi_ns_root()
+sabi_node_t *sabi_ns_root(void)
 {
 	return root;
 }
@@ -230,7 +230,7 @@ sabi_node_t *sabi_ns_add_object(state_t *state, sabi_name_t *name, sabi_object_t
 	return node;
 }
 
-void sabi_ns_init()
+void sabi_ns_init(void)
 {
 	sabi_node_t *node;
 	sabi_object_t object;
