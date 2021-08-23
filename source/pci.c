@@ -128,9 +128,7 @@ sabi_pci_t *sabi_pci_resolve_address(sabi_node_t *region)
 sabi_node_t *sabi_pci_next_node(sabi_node_t *node)
 {
 	int type, search;
-	uint32_t hid;
 
-	hid = sabi_eisaid("PNP0A03");
 	search = 1;
 
 	while((node = sabi_next_node(node, search)))
@@ -140,7 +138,7 @@ sabi_node_t *sabi_pci_next_node(sabi_node_t *node)
 
 		if(type == SABI_OBJECT_DEVICE)
 		{
-			if(sabi_check_pnp_id(node, hid))
+			if(sabi_check_pnp_id(node, "PNP0A03"))
 			{
 				return node;
 			}

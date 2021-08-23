@@ -144,7 +144,6 @@ sabi_ec_t *sabi_ec_resolve(sabi_node_t *region)
 	uint64_t base, data;
 	sabi_node_t *node;
 	sabi_ec_t *ec;
-	uint32_t hid;
 
 	node = sabi_ns_search(region, "_HID");
 	if(node == 0)
@@ -159,8 +158,7 @@ sabi_ec_t *sabi_ec_resolve(sabi_node_t *region)
 		return ec;
 	}
 
-	hid = sabi_eisaid("PNP0C09");
-	status = sabi_check_pnp_id(node, hid);
+	status = sabi_check_pnp_id(node, "PNP0C09");
 	if(status == 0)
 	{
 		return 0;
