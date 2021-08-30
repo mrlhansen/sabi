@@ -32,6 +32,6 @@ void sabi_ec_read(sabi_ec_t*, uint8_t, uint8_t*);
 void sabi_ec_write(sabi_ec_t*, uint8_t, uint8_t);
 
 sabi_ec_t *sabi_ec_resolve(sabi_node_t*);
-void sabi_ec_call_reg();
+void sabi_ec_call_reg(void);
 
 #endif

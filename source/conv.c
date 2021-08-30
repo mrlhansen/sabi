@@ -85,6 +85,7 @@ void sabi_conv_tobuffer(sabi_data_t *dptr, sabi_data_t *sptr, int exists)
 	else
 	{
 		len = 0;
+		ptr = NULL;
 	}
 
 	if(exists)

@@ -5,7 +5,7 @@
 #include <sabi/api.h>
 #include <sabi/ec.h>
 
-static void sabi_call_init()
+static void sabi_call_init(void)
 {
 	sabi_node_t *node, *snode, *inode;
 	int sta, type, child;
@@ -61,7 +61,7 @@ static void sabi_call_pic(int mode)
 	sabi_eval_method(node, 1, &argv, 0);
 }
 
-uint16_t sabi_read_event()
+uint16_t sabi_read_event(void)
 {
 	uint32_t pm1a, pm1b;
 	uint64_t a, b;

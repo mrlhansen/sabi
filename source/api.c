@@ -299,35 +299,24 @@ uint32_t sabi_eisaid(const char *id)
 	return swap;
 }
 
-int sabi_check_pnp_id(sabi_node_t *parent, uint32_t id)
+static int check_pnp_id(sabi_node_t *node, const char *pnp_id)
 {
-	sabi_node_t *node;
+	int found_match = 0;
 	sabi_data_t data;
-	uint32_t value;
+	if (!node)
+		return 0;
 
-	node = sabi_ns_exists(parent, "_HID");
-	if(node)
-	{
-		sabi_eval_node(node, &data);
-		value = data.integer.value;
-		sabi_clean_data(&data);
-		if(value == id)
-		{
-			return 1;
-		}
-	}
+	sabi_eval_node(node, &data);
+	found_match = (data.type == SABI_DATA_INTEGER
+			&& data.integer.value == sabi_eisaid(pnp_id))
+		|| (data.type == SABI_DATA_STRING
+			&& !strcmp(data.string.value, pnp_id));
+	sabi_clean_data(&data);
+	return found_match;
+}
 
-	node = sabi_ns_exists(parent, "_CID");
-	if(node)
-	{
-		sabi_eval_node(node, &data);
-		value = data.integer.value;
-		sabi_clean_data(&data);
-		if(value == id)
-		{
-			return 1;
-		}
-	}
-
-	return 0;
+int sabi_check_pnp_id(sabi_node_t *parent, const char *pnp_id)
+{
+	return check_pnp_id(sabi_ns_exists(parent, "_HID"), pnp_id)
+		|| check_pnp_id(sabi_ns_exists(parent, "_CID"), pnp_id);
 }

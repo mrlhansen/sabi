@@ -21,7 +21,7 @@ void sabi_clone_data(sabi_data_t *dptr, sabi_data_t *sptr);
 
 // Hardware identification
 uint32_t sabi_eisaid(const char *name);
-int sabi_check_pnp_id(sabi_node_t *parent, uint32_t id);
+int sabi_check_pnp_id(sabi_node_t *parent, const char *pnp_id);
 
 // Tables
 void sabi_register_table(uint64_t);

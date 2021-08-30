@@ -1,3 +1,4 @@
+#include <sabi/api.h>
 #include <sabi/namespace.h>
 #include <sabi/tables.h>
 #include <sabi/parser.h>
@@ -23,7 +24,7 @@ static void parse_table(uint64_t address, uint32_t size)
 	sabi_free_state(state);
 }
 
-fadt_t *sabi_fadt_table()
+fadt_t *sabi_fadt_table(void)
 {
 	return fadt;
 }

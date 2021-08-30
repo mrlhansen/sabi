@@ -14,7 +14,7 @@ enum {
 	ACPI_WAKE         = (1 << 15),
 };
 
-uint16_t sabi_read_event();
+uint16_t sabi_read_event(void);
 void sabi_write_event(uint16_t);
 int sabi_enable_acpi(int);
 
