@@ -301,22 +301,53 @@ uint32_t sabi_eisaid(const char *id)
 
 static int check_pnp_id(sabi_node_t *node, const char *pnp_id)
 {
-	int found_match = 0;
+	int found = 0;
 	sabi_data_t data;
-	if (!node)
-		return 0;
 
 	sabi_eval_node(node, &data);
-	found_match = (data.type == SABI_DATA_INTEGER
-			&& data.integer.value == sabi_eisaid(pnp_id))
-		|| (data.type == SABI_DATA_STRING
-			&& !strcmp(data.string.value, pnp_id));
+
+	if(data.type == SABI_DATA_INTEGER)
+	{
+		if(data.integer.value == sabi_eisaid(pnp_id))
+		{
+			found = 1;
+		}
+	}
+	else if(data.type == SABI_DATA_STRING)
+	{
+		if(strcmp(data.string.value, pnp_id) == 0)
+		{
+			found = 1;
+		}
+	}
+
 	sabi_clean_data(&data);
-	return found_match;
+
+	return found;
 }
 
 int sabi_check_pnp_id(sabi_node_t *parent, const char *pnp_id)
 {
-	return check_pnp_id(sabi_ns_exists(parent, "_HID"), pnp_id)
-		|| check_pnp_id(sabi_ns_exists(parent, "_CID"), pnp_id);
+	sabi_node_t *node;
+	int found;
+
+	node = sabi_ns_exists(parent, "_HID");
+	if(node)
+	{
+		if(check_pnp_id(node, pnp_id))
+		{
+			return 1;
+		}
+	}
+
+	node = sabi_ns_exists(parent, "_CID");
+	if(node)
+	{
+		if(check_pnp_id(node, pnp_id))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
 }

@@ -453,5 +453,9 @@ void sabi_parse_termlist(state_t *state, uint8_t *end)
 			break;
 		}
 	}
+
+	// Normally this assignment is unnecessary, because they should be equal.
+	// However, on some broken firmware the end might not be correct, so it
+	// might actually be better NOT to manually set the end.
 	state->aml = end;
 }
