@@ -329,7 +329,6 @@ static int check_pnp_id(sabi_node_t *node, const char *pnp_id)
 int sabi_check_pnp_id(sabi_node_t *parent, const char *pnp_id)
 {
 	sabi_node_t *node;
-	int found;
 
 	node = sabi_ns_exists(parent, "_HID");
 	if(node)

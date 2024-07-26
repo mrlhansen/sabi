@@ -65,8 +65,8 @@ void sabi_register_table(uint64_t address)
 
 	if(valid)
 	{
-		size = (hdr->length - 36);
-		address = (address + 36);
+		size = hdr->length - sizeof(hdr_t);
+		address = address + sizeof(hdr_t);
 		parse_table(address, size);
 	}
 }
